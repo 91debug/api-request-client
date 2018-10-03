@@ -1,0 +1,62 @@
+{
+  "name": "api-request-client",
+  "version": "0.0.0",
+  "description": "axios request wrapper",
+  "main": "dist/index.js",
+  "typings": "definitions/index",
+  "typescript": {
+    "definition": "definitions/index"
+  },
+  "keyword": [
+    "request",
+    "axios",
+    "request builder"
+  ],
+  "scripts": {
+    "test": "jest --config jest.config.json",
+    "build": "./node_modules/.bin/gulp build",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags",
+    "ci": "npm run test && npm run lint && npm run build",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run ci",
+    "preversion": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/91debug/api-request-client.git"
+  },
+  "keywords": [],
+  "author": "jiseung jung <jiseung.jung@corretto.io>",
+  "bugs": {
+    "url": "https://github.com/91debug/api-request-client/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@types/axios": "^0.14.0",
+    "@types/jest": "^23.3.2",
+    "@types/react": "^16.4.14",
+    "@types/styled-components": "^3.0.1",
+    "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.0.4",
+    "cross-env": "^5.2.0",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "jest": "^23.6.0",
+    "merge2": "^1.2.2",
+    "prettier": "^1.14.3",
+    "run-sequence": "^2.2.1",
+    "ts-jest": "^23.10.2",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.1.1"
+  }
+}
