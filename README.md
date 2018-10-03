@@ -21,7 +21,7 @@ interface User {
 }
 
 const createUser = async () => {
-  const requestClient = new RequestClient('users', 'http://localhost:8080');
+  const requestClient = new APIRequestClient('users', 'http://localhost:8080');
   try {
     const response
       = await requestClient
