@@ -19,27 +19,24 @@ describe('RequestClient', () => {
     expect(requestObject).toMatchObject(requestObject);
   });
 
-  it('can append Headers', async () => {
-    const mockParams = {
-      test: 1,
-    };
+  it('can append header', () => {
+    const response = request
+      .appendHeader('x-test-header', 'hihi');
 
-    mockAxiosAdapter
-      .onPost(`${MOCK_API_HOST}/test`, mockParams)
-      .reply(function(config: AxiosRequestConfig) {
-        if (config.headers && config.headers['x-test-header'] === 'hihi') {
-          return [200, 'success'];
-        }
-        return [200, 'headers error'];
-      });
+    expect(response.getHeaders()['x-test-header']).toBe('hihi');
+  });
 
-    const response = await request
-      .setMethod('POST')
-      .setData(mockParams)
-      .appendHeader('x-test-header', 'hihi')
-      .send();
+  it('can append headers', () => {
+    const response = request
+    .appendHeader('origin-header', 'aaa')
+    .appendHeaders({
+      'x-test-header': 'hihi',
+      'x-test-header2': 'hihi2',
+    });
 
-    expect(response).toBe('success');
+    expect(response.getHeaders()['origin-header']).toBe('aaa');
+    expect(response.getHeaders()['x-test-header']).toBe('hihi');
+    expect(response.getHeaders()['x-test-header2']).toBe('hihi2');
   });
 
   it('can set params', async () => {

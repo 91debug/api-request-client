@@ -42,6 +42,13 @@ class APIRequestClient {
         this.headers[key] = value;
         return this;
     }
+    appendHeaders(headers) {
+        this.headers = Object.assign({}, this.headers, headers);
+        return this;
+    }
+    getHeaders() {
+        return this.headers;
+    }
     throwError(error) {
         if (error.response) {
             return new ResponseError_1.ResponseError(this.url, error.response);

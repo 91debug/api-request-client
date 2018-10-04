@@ -21,6 +21,8 @@ export declare class APIRequestClient {
     setData(data: object): this;
     setParams(params: object): this;
     appendHeader(key: string, value: string): this;
+    appendHeaders(headers: Header): this;
+    getHeaders(): Header;
     private throwError;
     send<T>(): Promise<T>;
 }

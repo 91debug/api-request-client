@@ -56,6 +56,15 @@ export class APIRequestClient {
     return this;
   }
 
+  appendHeaders(headers: Header) {
+    this.headers = {...this.headers, ...headers};
+    return this;
+  }
+
+  getHeaders() {
+    return this.headers;
+  }
+
   private throwError(error: AxiosError) {
     if (error.response) {
       return new ResponseError(this.url, error.response);
