@@ -40,6 +40,21 @@ const createUser = async () => {
     }
   }
 }
+```
 
+### Post form-data
+```ts
+import {
+  APIRequestClient,
+  ResponseError,
+} from 'api-request-client';
 
+const form: FormData = new FormData();
+form.append('test', '1');
+
+const response = await request
+  .setMethod('POST')
+  .setBodyType('form')
+  .setData(form)
+  .send<Params>();
 ```
