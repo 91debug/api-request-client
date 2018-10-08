@@ -82,6 +82,32 @@ describe('RequestClient', () => {
     expect(response.test).toBe(1);
   });
 
+  it('can set formdata', async () => {
+    interface Params {
+      test: number;
+    }
+
+    const form: FormData = new FormData();
+
+    mockAxiosAdapter
+      .onPost(`${MOCK_API_HOST}/test`)
+      .reply(function(config: AxiosRequestConfig) {
+        return [200, {
+          test: config.data.get('test'),
+        }];
+      });
+
+    form.append('test', '1');
+
+    const response = await request
+      .setMethod('POST')
+      .setBodyType('form')
+      .setData(form)
+      .send<Params>();
+
+    expect(response.test).toBe('1');
+  });
+
   it('can set body and params', async () => {
     const mockParams = {
       test: 1,

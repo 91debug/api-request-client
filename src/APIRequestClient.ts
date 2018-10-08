@@ -8,6 +8,11 @@ import { ResponseError } from './errors/ResponseError';
  */
 export type HttpMethods = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 
+/**
+ * Body types
+ */
+export type BodyTypes = 'json' | 'form';
+
 export interface Header {
   [key: string]: string;
 }
@@ -22,10 +27,12 @@ export class APIRequestClient {
   private headers: Header;
   private data?: object;
   private params?: object;
+  private bodyType: BodyTypes;
 
   constructor(url: string, baseURL?: string) {
     this.headers = {};
     this.url = url;
+    this.bodyType = 'json';
     this._axios = axios.create({
       baseURL,
     });
@@ -41,7 +48,12 @@ export class APIRequestClient {
     return this;
   }
 
-  setData(data: object) {
+  setBodyType(bodyType: BodyTypes) {
+    this.bodyType = bodyType;
+    return this;
+  }
+
+  setData(data: object | FormData) {
     this.data = data;
     return this;
   }
@@ -74,6 +86,10 @@ export class APIRequestClient {
 
   async send<T>(): Promise<T> {
     try {
+      if (this.bodyType === 'form') {
+        this.headers['Content-Type'] = 'multipart/form-data';
+      }
+
       const response = await this._axios.request<T>({
         method: this.method,
         url: this.url,
