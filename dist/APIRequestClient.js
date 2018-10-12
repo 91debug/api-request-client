@@ -18,6 +18,7 @@ class APIRequestClient {
     constructor(url, baseURL) {
         this.headers = {};
         this.url = url;
+        this.bodyType = 'json';
         this._axios = axios_1.default.create({
             baseURL,
         });
@@ -28,6 +29,10 @@ class APIRequestClient {
     }
     setMethod(method) {
         this.method = method;
+        return this;
+    }
+    setBodyType(bodyType) {
+        this.bodyType = bodyType;
         return this;
     }
     setData(data) {
@@ -58,6 +63,9 @@ class APIRequestClient {
     send() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (this.bodyType === 'form') {
+                    this.headers['Content-Type'] = 'multipart/form-data';
+                }
                 const response = yield this._axios.request({
                     method: this.method,
                     url: this.url,

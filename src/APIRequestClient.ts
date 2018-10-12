@@ -48,6 +48,10 @@ export class APIRequestClient {
     return this;
   }
 
+  getMethod() {
+    return this.method;
+  }
+
   setBodyType(bodyType: BodyTypes) {
     this.bodyType = bodyType;
     return this;
@@ -56,6 +60,10 @@ export class APIRequestClient {
   setData(data: object | FormData) {
     this.data = data;
     return this;
+  }
+
+  getData() {
+    return this.data;
   }
 
   setParams(params: object) {
