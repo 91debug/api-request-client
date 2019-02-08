@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 /**
  * HTTP METHODS
  */
@@ -23,12 +24,15 @@ export declare class APIRequestClient {
     constructor(url: string, baseURL?: string);
     setUrl(url: string): this;
     setMethod(method: HttpMethods): this;
+    getMethod(): string | undefined;
     setBodyType(bodyType: BodyTypes): this;
     setData(data: object | FormData): this;
+    getData(): object | undefined;
     setParams(params: object): this;
     appendHeader(key: string, value: string): this;
     appendHeaders(headers: Header): this;
     getHeaders(): Header;
+    getAxiosInstance(): AxiosInstance;
     private throwError;
     send<T>(): Promise<T>;
 }

@@ -85,6 +85,10 @@ export class APIRequestClient {
     return this.headers;
   }
 
+  getAxiosInstance() {
+    return this._axios;
+  }
+
   private throwError(error: AxiosError) {
     if (error.response) {
       return new ResponseError(this.url, error.response);
