@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-import { RequestError  } from './errors/NetworkError';
+import { RequestError } from './errors/NetworkError';
 import { ResponseError } from './errors/ResponseError';
 
 /**
@@ -17,29 +17,44 @@ export interface Header {
   [key: string]: string;
 }
 
+export interface ConstructorOptions {
+  url?: string;
+  baseURL?: string;
+}
+
 /**
  * APIRequestClient
  */
 export class APIRequestClient {
   private _axios: AxiosInstance;
-  private url: string;
   private method?: string;
   private headers: Header;
   private data?: object;
   private params?: object;
   private bodyType: BodyTypes;
 
-  constructor(url: string, baseURL?: string) {
+  private urlTree: Array<string> = [];
+
+  constructor(options: ConstructorOptions) {
     this.headers = {};
-    this.url = url;
     this.bodyType = 'json';
+
+    if (options.url) {
+      this.urlTree.push(options.url);
+    }
+
     this._axios = axios.create({
-      baseURL,
+      baseURL: options.baseURL,
     });
   }
 
-  setUrl(url: string) {
-    this.url = url;
+  setUrl(...url: Array<string>) {
+    this.urlTree = url;
+    return this;
+  }
+
+  appendUrl(...url: Array<string>) {
+    this.urlTree = this.urlTree.concat(url);
     return this;
   }
 
@@ -77,7 +92,7 @@ export class APIRequestClient {
   }
 
   appendHeaders(headers: Header) {
-    this.headers = {...this.headers, ...headers};
+    this.headers = { ...this.headers, ...headers };
     return this;
   }
 
@@ -89,11 +104,19 @@ export class APIRequestClient {
     return this._axios;
   }
 
+  assembleUrl() {
+    if (this.urlTree.length === 0) {
+      return '/';
+    }
+
+    return this.urlTree.join('/');
+  }
+
   private throwError(error: AxiosError) {
     if (error.response) {
-      return new ResponseError(this.url, error.response);
+      return new ResponseError(this.assembleUrl(), error.response);
     }
-    return new RequestError(this.url);
+    return new RequestError(this.assembleUrl());
   }
 
   async send<T>(): Promise<T> {
@@ -104,7 +127,7 @@ export class APIRequestClient {
 
       const response = await this._axios.request<T>({
         method: this.method,
-        url: this.url,
+        url: this.urlTree.join('/'),
         headers: this.headers,
         data: this.data,
         params: this.params,

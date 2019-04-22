@@ -11,25 +11,22 @@ describe('RequestClient', () => {
 
   beforeEach(() => {
     mockAxiosAdapter = new MockAdapter(axios);
-    request = new APIRequestClient('test', MOCK_API_HOST);
+    request = new APIRequestClient({ url: 'test', baseURL: MOCK_API_HOST });
   });
 
   it('constructor()', async () => {
-    const requestObject = new APIRequestClient('/test');
+    const requestObject = new APIRequestClient({ url: '/test' });
     expect(requestObject).toMatchObject(requestObject);
   });
 
   it('can append header', () => {
-    const response = request
-      .appendHeader('x-test-header', 'hihi');
+    const response = request.appendHeader('x-test-header', 'hihi');
 
     expect(response.getHeaders()['x-test-header']).toBe('hihi');
   });
 
   it('can append headers', () => {
-    const response = request
-    .appendHeader('origin-header', 'aaa')
-    .appendHeaders({
+    const response = request.appendHeader('origin-header', 'aaa').appendHeaders({
       'x-test-header': 'hihi',
       'x-test-header2': 'hihi2',
     });
@@ -44,11 +41,9 @@ describe('RequestClient', () => {
       params: { test: 1 },
     };
 
-    mockAxiosAdapter
-      .onGet(`${MOCK_API_HOST}/test`, mockParams)
-      .reply(function(config: AxiosRequestConfig) {
-        return [200, 'success'];
-      });
+    mockAxiosAdapter.onGet(`${MOCK_API_HOST}/test`, mockParams).reply(function(config: AxiosRequestConfig) {
+      return [200, 'success'];
+    });
 
     const response = await request
       .setMethod('GET')
@@ -66,13 +61,14 @@ describe('RequestClient', () => {
       test: 1,
     };
 
-    mockAxiosAdapter
-      .onPost(`${MOCK_API_HOST}/test`, mockParams)
-      .reply(function(config: AxiosRequestConfig) {
-        return [200, {
+    mockAxiosAdapter.onPost(`${MOCK_API_HOST}/test`, mockParams).reply(function(config: AxiosRequestConfig) {
+      return [
+        200,
+        {
           test: 1,
-        }];
-      });
+        },
+      ];
+    });
 
     const response = await request
       .setMethod('POST')
@@ -89,13 +85,14 @@ describe('RequestClient', () => {
 
     const form: FormData = new FormData();
 
-    mockAxiosAdapter
-      .onPost(`${MOCK_API_HOST}/test`)
-      .reply(function(config: AxiosRequestConfig) {
-        return [200, {
+    mockAxiosAdapter.onPost(`${MOCK_API_HOST}/test`).reply(function(config: AxiosRequestConfig) {
+      return [
+        200,
+        {
           test: config.data.get('test'),
-        }];
-      });
+        },
+      ];
+    });
 
     form.append('test', '1');
 
@@ -113,14 +110,12 @@ describe('RequestClient', () => {
       test: 1,
     };
 
-    mockAxiosAdapter
-      .onPatch(`${MOCK_API_HOST}/test`, mockParams)
-      .reply(function(config: AxiosRequestConfig) {
-        if (config.params && config.params.testParam === 1) {
-          return [200, 'success'];
-        }
-        return [200, 'params error'];
-      });
+    mockAxiosAdapter.onPatch(`${MOCK_API_HOST}/test`, mockParams).reply(function(config: AxiosRequestConfig) {
+      if (config.params && config.params.testParam === 1) {
+        return [200, 'success'];
+      }
+      return [200, 'params error'];
+    });
 
     const response = await request
       .setMethod('PATCH')
@@ -141,22 +136,20 @@ describe('RequestClient', () => {
     };
 
     let error;
-    mockAxiosAdapter
-      .onPatch(`${MOCK_API_HOST}/test`, mockParams)
-      .reply(function(config: AxiosRequestConfig) {
-        return [400, 'params error'];
-      });
+    mockAxiosAdapter.onPatch(`${MOCK_API_HOST}/test`, mockParams).reply(function(config: AxiosRequestConfig) {
+      return [400, 'params error'];
+    });
 
     try {
-    const response = await request
-      .setMethod('PATCH')
-      .setData({
-        test: 1,
-      })
-      .setParams({
-        testParam: 1,
-      })
-      .send();
+      const response = await request
+        .setMethod('PATCH')
+        .setData({
+          test: 1,
+        })
+        .setParams({
+          testParam: 1,
+        })
+        .send();
     } catch (err) {
       error = err;
     }
@@ -164,4 +157,8 @@ describe('RequestClient', () => {
     expect(error).toBeInstanceOf(ResponseError);
   });
 
+  it('can set url', () => {
+    const test = new APIRequestClient({ url: 'test', baseURL: 'http://localhost:8080' });
+    expect(test.appendUrl('testId', 'test2', 'test2Id').assembleUrl()).toEqual('test/testId/test2/test2Id');
+  });
 });
