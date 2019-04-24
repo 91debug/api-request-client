@@ -6,7 +6,7 @@ import { APIRequestClient } from '../dist/index';
 const App = () => {
   const [body, setBody] = useState(undefined);
   useEffect(() => {
-    const client = new APIRequestClient('https://jsonplaceholder.typicode.com/todos/1');
+    const client = new APIRequestClient({ url: 'https://jsonplaceholder.typicode.com/todos/1' });
     client
       .setMethod('GET')
       .send()

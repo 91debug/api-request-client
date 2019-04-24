@@ -1,6 +1,6 @@
 {
   "name": "api-request-client",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "axios request wrapper",
   "main": "dist/index.js",
   "keyword": [
@@ -67,6 +67,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "natives": "^1.1.6"
   }
 }
