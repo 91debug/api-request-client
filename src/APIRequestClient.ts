@@ -58,6 +58,11 @@ export class APIRequestClient {
     return this;
   }
 
+  prependUrl(...url: Array<string>) {
+    this.urlTree.unshift(...url);
+    return this;
+  }
+
   setMethod(method: HttpMethods) {
     this.method = method;
     return this;

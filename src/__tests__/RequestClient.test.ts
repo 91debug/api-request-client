@@ -161,4 +161,9 @@ describe('RequestClient', () => {
     const test = new APIRequestClient({ url: 'test', baseURL: 'http://localhost:8080' });
     expect(test.appendUrl('testId', 'test2', 'test2Id').assembleUrl()).toEqual('test/testId/test2/test2Id');
   });
+
+  it('prepend', () => {
+    const test = new APIRequestClient({ url: 'test', baseURL: 'http://localhost:8080' });
+    expect(test.prependUrl('testId', 'test2', 'test2Id').assembleUrl()).toEqual('testId/test2/test2Id/test');
+  });
 });

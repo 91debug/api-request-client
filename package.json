@@ -1,6 +1,6 @@
 {
   "name": "api-request-client",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "axios request wrapper",
   "main": "dist/index.js",
   "keyword": [
